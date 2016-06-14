@@ -5,10 +5,11 @@ function Contact(first, last) {
   this.addresses = [];
 }
 
-function Address(street, city, state, type) {
+function Address(street, city, state, zip, type) {
   this.street = street;
   this.city = city;
   this.state = state;
+  this.zip = zip;
   this.type = type;
 }
 
@@ -17,7 +18,7 @@ Contact.prototype.fullName = function() {
 }
 
 Address.prototype.fullAddress = function() {
-  return this.street + ", " + this.city + ", " + this.state + ", " + this.type;
+  return this.street + ", " + this.city + ", " + this.state + ", " +  this.zip + ", " + this.type;
 }
 
 function resetFields() {
@@ -26,7 +27,9 @@ function resetFields() {
     $("input.new-street").val("");
     $("input.new-city").val("");
     $("input.new-state").val("");
+    $("input#new-zip").val("");
     $("input.new-type").val("");
+    $("address").not(":first-child").remove();
 }
 
 // user interface logic
@@ -47,6 +50,10 @@ $(document).ready(function() {
                                    '<input type="text" class="form-control new-state">' +
                                  '</div>' +
                                  '<div class="form-group">' +
+                                   '<label for="new-zip">Zip Code</label>' +
+                                   '<input type="text" class="form-control" id= "new-zip">' +
+                                 '</div>' +
+                                 '<div class="form-group">' +
                                    '<label for="new-type">Input Address Type</label>' +
                                    '<input type="text" class="form-control new-type">' +
                                  '</div>' +
@@ -64,19 +71,21 @@ $(document).ready(function() {
       var inputtedStreet = $(this).find("input.new-street").val();
       var inputtedCity = $(this).find("input.new-city").val();
       var inputtedState = $(this).find("input.new-state").val();
+      var inputtedZip = $(this).find("input#new-zip").val();
       var inputtedType = $(this).find("input.new-type").val();
-      var newAddress = new Address(inputtedStreet, inputtedCity, inputtedState, inputtedType)
+      var newAddress = new Address(inputtedStreet, inputtedCity, inputtedState, inputtedZip, inputtedType)
       newContact.addresses.push(newAddress)
     });
 
     $("ul#contacts").append("<li><span class='contact'>" + newContact.fullName() + "</span></li>");
-
+    // debugger;
     $(".contact").last().click(function() {
       $("#show-contact").show();
       $("#show-contact h2").text(newContact.fullName());
       $(".first-name").text(newContact.firstName);
       $(".last-name").text(newContact.lastName);
       $("ul#addresses").text("");
+      debugger;
       newContact.addresses.forEach(function(address) {
         $("ul#addresses").append("<li>" + address.fullAddress() + "</li>");
       });
